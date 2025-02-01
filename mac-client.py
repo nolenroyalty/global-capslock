@@ -10,8 +10,8 @@ def get_capslock_state():
 
 def set_capslock_state(enabled):
     script = '''
-    ObjC.import("IOKit")
-    ObjC.import("CoreServices")
+    ObjC.import("IOKit");
+    ObjC.import("CoreServices");
     (() => {
         var ioConnect = Ref();
         var state = Ref();
