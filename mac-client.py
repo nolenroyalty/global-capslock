@@ -4,10 +4,12 @@ import websockets
 import subprocess
 import time
 import json
+from websockets.exceptions import ConnectionClosedError, WebSocketException
 
 def get_capslock_state():
     return bool(CGEventSourceKeyState(kCGEventSourceStateHIDSystemState, 0x39))
 
+# huge thank you to https://github.com/erikpt/caps-lock-shell-script for showing me how to do this
 def set_capslock_state(enabled):
     script = '''
     ObjC.import("IOKit");
@@ -32,30 +34,45 @@ def set_capslock_state(enabled):
 
 async def run_client():
     uri = "ws://localhost:8000/ws"
-    last_state = False
     
     async with websockets.connect(uri) as websocket:
+        last_state = False
         while True:
-            # Check local caps lock state
             current_state = get_capslock_state()
-            #print(current_state)
             
-            # If state changed, notify server
             if current_state != last_state:
-                print("CHANGED")
+                print(f"CHANGED {last_state} => {current_state}")
                 await websocket.send(json.dumps({"toggle": current_state}))
                 last_state = current_state
-            
-            # Handle incoming state updates
+
             try:
                 message = await asyncio.wait_for(websocket.recv(), timeout=0.1)
                 data = json.loads(message)
-                if "enabled" in data and data["enabled"] != current_state:
-                    set_capslock_state(data["enabled"])
-            except asyncio.TimeoutError:
-                pass  # No message received, continue polling
-            
-            await asyncio.sleep(0.1)  # Poll every 100ms
+                if "enabled" in data:
+                    d = bool(data["enabled"])
+                    if d != current_state:
+                        set_capslock_state(d)
+                        current_state = d
+            except asyncio.TimeoutError as e:
+                pass
+
+            try:
+                await asyncio.sleep(0.1)
+            except Exception as e:
+                print(e)
+                return
+
+
+async def run_client_loop():
+    while True:
+        try:
+            await run_client()
+        except (KeyboardInterrupt, asyncio.CancelledError):
+            print("\nExiting.")
+            return
+        except (OSError, ConnectionClosedError, WebSocketException, ConnectionResetError) as e:
+            print(f"Error talking to server: {e}. Sleeping and trying again...")
+            await asyncio.sleep(2)
 
 if __name__ == "__main__":
-    asyncio.run(run_client())
+    asyncio.run(run_client_loop())
