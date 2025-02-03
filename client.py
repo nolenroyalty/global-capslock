@@ -87,24 +87,26 @@ async def run_client():
                 print(f"CHANGED {last_state} => {current_state}")
                 await websocket.send(message)
                 last_state = current_state
-
-            try:
-                data = await asyncio.wait_for(websocket.recv(), timeout=0.1)
-                if data == "1" and current_state == False:
-                    set_capslock_state(True)
-                    current_state = True
-                elif data == "0" and current_state == True:
-                    set_capslock_state(False)
-                    current_state = False
-                elif data == "0" or data == "1":
+            else:
+                try:
+                    data = await asyncio.wait_for(websocket.recv(), timeout=0.05)
+                    if data == "1" and current_state == False:
+                        set_capslock_state(True)
+                        current_state = True
+                        last_state = True
+                    elif data == "0" and current_state == True:
+                        set_capslock_state(False)
+                        current_state = False
+                        last_state = False
+                    elif data == "0" or data == "1":
+                        pass
+                    else:
+                        print(f"ignoring invalid data...")
+                except asyncio.TimeoutError as e:
                     pass
-                else:
-                    print(f"ignoring invalid data...")
-            except asyncio.TimeoutError as e:
-                pass
 
             try:
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.05)
             except Exception as e:
                 print(e)
                 return
