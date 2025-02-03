@@ -83,18 +83,23 @@ async def run_client():
             current_state = get_capslock_state()
             
             if current_state != last_state:
+                message = "1" if current_state else "0"
                 print(f"CHANGED {last_state} => {current_state}")
-                await websocket.send(json.dumps({"toggle": current_state}))
+                await websocket.send(message)
                 last_state = current_state
 
             try:
-                message = await asyncio.wait_for(websocket.recv(), timeout=0.1)
-                data = json.loads(message)
-                if "enabled" in data:
-                    d = bool(data["enabled"])
-                    if d != current_state:
-                        set_capslock_state(d)
-                        current_state = d
+                data = await asyncio.wait_for(websocket.recv(), timeout=0.1)
+                if data == "1" and current_state == False:
+                    set_capslock_state(True)
+                    current_state = True
+                elif data == "0" and current_state == True:
+                    set_capslock_state(False)
+                    current_state = False
+                elif data == "0" or data == "1":
+                    pass
+                else:
+                    print(f"ignoring invalid data...")
             except asyncio.TimeoutError as e:
                 pass
 
