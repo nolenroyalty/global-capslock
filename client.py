@@ -33,6 +33,8 @@ if platform.system() == "Darwin":
         ''' % (1 if enabled else 0)
         subprocess.run(['osascript', '-l', 'JavaScript', '-e', script])
 
+    def check_dependencies():
+        pass
 elif platform.system() == "Windows":
     import ctypes
     from ctypes import wintypes
@@ -69,8 +71,36 @@ elif platform.system() == "Windows":
         current = get_capslock_state()
         if current != enabled:
             toggle_capslock()
+
+    def check_dependencies():
+        pass
+elif platform.system().lower().startswith("linux"):
+    import shutil
+    import subprocess
+
+    def check_dependencies():
+        commands = ["xdotool", "xset"]
+        missing = []
+        for c in commands:
+            if shutil.which(c) is None:
+                missing.append(c)
+
+        if missing:
+            l = ", ".join(missing)
+            raise NotImplementedError(f"Missing dependencies ({l}) - install xdotool using your package manager")
+
+    def get_capslock_state():
+        result = subprocess.run(["xset", "-q"], capture_output=True, text=True, check=True)
+        for line in result.stdout.splitlines():
+            if "caps lock" in line.lower():
+                return "on" in line.lower()
+
+    def set_capslock_state(enabled):
+        key = "Caps_Lock+Caps_Lock" if enabled else "Caps_Lock-Caps_Lock"
+        subprocess.run(["xdotool", "key", key], check=True)
 else:
-    raise Exception("This script is only supported on MacOS and Windows")
+    plat = platform.system()
+    raise NotImplementedError(f"Unsupported platform: {plat}")
 
 async def get_latest_message(websocket):
     count = 0
@@ -139,4 +169,5 @@ async def run_client_loop():
             await asyncio.sleep(2)
 
 if __name__ == "__main__":
+    check_dependencies()
     asyncio.run(run_client_loop())
