@@ -72,7 +72,18 @@ elif platform.system() == "Windows":
 else:
     raise Exception("This script is only supported on MacOS and Windows")
 
-
+async def get_latest_message(websocket):
+    count = 0
+    max_count = 50
+    last = None
+    while True:
+        if count >= max_count:
+            return last
+        try:
+            last = await asyncio.wait_for(websocket.recv(), timeout=0.005)
+        except asyncio.TimeoutError:
+            return last
+        count += 1
 
 async def run_client():
     uri = "ws://localhost:8000/ws"
@@ -89,7 +100,7 @@ async def run_client():
                 last_state = current_state
             else:
                 try:
-                    data = await asyncio.wait_for(websocket.recv(), timeout=0.05)
+                    data = await get_latest_message(websocket)
                     if data == "1" and current_state == False:
                         set_capslock_state(True)
                         current_state = True
@@ -99,6 +110,10 @@ async def run_client():
                         current_state = False
                         last_state = False
                     elif data == "0" or data == "1":
+                        # consistent
+                        pass
+                    elif data is None:
+                        # no update
                         pass
                     else:
                         print(f"ignoring invalid data...")
