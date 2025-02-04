@@ -7,12 +7,13 @@ import platform
 if platform.system() == "Darwin":
     from Quartz import CGEventSourceKeyState, kCGEventSourceStateHIDSystemState
     import subprocess
+
     def get_capslock_state():
         return bool(CGEventSourceKeyState(kCGEventSourceStateHIDSystemState, 0x39))
 
     # huge thank you to https://github.com/erikpt/caps-lock-shell-script for showing me how to do this
     def set_capslock_state(enabled):
-        script = '''
+        script = """
         ObjC.import("IOKit");
         ObjC.import("CoreServices");
         (() => {
@@ -30,8 +31,10 @@ if platform.system() == "Darwin":
             $.IOHIDSetModifierLockState(ioConnect, $.kIOHIDCapsLockState, %d);
             $.IOServiceClose(ioConnect);
         })();
-        ''' % (1 if enabled else 0)
-        subprocess.run(['osascript', '-l', 'JavaScript', '-e', script])
+        """ % (
+            1 if enabled else 0
+        )
+        subprocess.run(["osascript", "-l", "JavaScript", "-e", script])
 
     def check_dependencies():
         pass
@@ -56,10 +59,8 @@ elif platform.system() == "Windows":
     ]
     user32.keybd_event.restype = None
 
-
     def get_capslock_state():
         return bool(user32.GetKeyState(VK_CAPITAL) & 1)
-
 
     def toggle_capslock():
         user32.keybd_event(VK_CAPITAL, CAPSLOCK_SCANCODE, KEYEVENTF_EXTENDEDKEY, 0)
@@ -102,6 +103,7 @@ else:
     plat = platform.system()
     raise NotImplementedError(f"Unsupported platform: {plat}")
 
+
 async def get_latest_message(websocket):
     count = 0
     max_count = 50
@@ -115,14 +117,16 @@ async def get_latest_message(websocket):
             return last
         count += 1
 
+
 async def run_client():
     uri = "ws://localhost:8000/ws"
-    
+
     async with websockets.connect(uri) as websocket:
+        print("connected")
         last_state = False
         while True:
             current_state = get_capslock_state()
-            
+
             if current_state != last_state:
                 message = "1" if current_state else "0"
                 print(f"CHANGED {last_state} => {current_state}")
@@ -164,9 +168,15 @@ async def run_client_loop():
         except (KeyboardInterrupt, asyncio.CancelledError):
             print("\nExiting.")
             return
-        except (OSError, ConnectionClosedError, WebSocketException, ConnectionResetError) as e:
+        except (
+            OSError,
+            ConnectionClosedError,
+            WebSocketException,
+            ConnectionResetError,
+        ) as e:
             print(f"Error talking to server: {e}. Sleeping and trying again...")
             await asyncio.sleep(2)
+
 
 if __name__ == "__main__":
     check_dependencies()
