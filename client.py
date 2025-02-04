@@ -94,11 +94,18 @@ elif platform.system().lower().startswith("linux"):
         result = subprocess.run(["xset", "-q"], capture_output=True, text=True, check=True)
         for line in result.stdout.splitlines():
             if "caps lock" in line.lower():
-                return "on" in line.lower()
+                split = line.split(":")
+                for (i, val) in enumerate(split):
+                    if "caps lock" in val.lower():
+                        if len(split) <= i + 1: return False
+                        return split[i+1].lower():
+
+                #return "on" in line.lower()
 
     def set_capslock_state(enabled):
-        key = "Caps_Lock+Caps_Lock" if enabled else "Caps_Lock-Caps_Lock"
-        subprocess.run(["xdotool", "key", key], check=True)
+        state = get_capslock_state()
+        if state != enabled:
+            subprocess.run(["xdotool", "key", "Caps_Lock+Caps_Lock"], check=True)
 else:
     plat = platform.system()
     raise NotImplementedError(f"Unsupported platform: {plat}")
@@ -119,7 +126,8 @@ async def get_latest_message(websocket):
 
 
 async def run_client():
-    uri = "ws://localhost:8000/ws"
+    #uri = "ws://localhost:8000/ws"
+    uri = "wss://globalcapslock.com/ws"
 
     async with websockets.connect(uri) as websocket:
         print("connected")
