@@ -3,6 +3,9 @@
 <img width="394" alt="Screenshot 2025-02-04 at 6 11 53 PM" src="https://github.com/user-attachments/assets/6179f4dc-0f9a-42ec-b8a7-5505127a0fe8" />
 
 ## [CURRENT GLOBAL CAPSLOCK STATUS AVAILABLE HERE](https://globalcapslock.com)
+(THATS https://globalcapslock.com)
+
+## WAIT WHAT
 
 BY USING THIS CLIENT YOU CAN SYNCHRONIZE YOUR CAPS LOCK STATE WITH EVERYONE ELSE USING THIS CLIENT
 
