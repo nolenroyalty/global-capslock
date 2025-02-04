@@ -98,7 +98,7 @@ elif platform.system().lower().startswith("linux"):
                 for (i, val) in enumerate(split):
                     if "caps lock" in val.lower():
                         if len(split) <= i + 1: return False
-                        return split[i+1].lower()
+                        return "on" in split[i+1].lower()
 
                 #return "on" in line.lower()
 
