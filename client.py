@@ -100,8 +100,6 @@ elif platform.system().lower().startswith("linux"):
                         if len(split) <= i + 1: return False
                         return "on" in split[i+1].lower()
 
-                #return "on" in line.lower()
-
     def set_capslock_state(enabled):
         state = get_capslock_state()
         if state != enabled:
