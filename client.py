@@ -3,6 +3,7 @@ import websockets
 import json
 from websockets.exceptions import ConnectionClosedError, WebSocketException
 import platform
+import glob
 
 if platform.system() == "Darwin":
     from Quartz import CGEventSourceKeyState, kCGEventSourceStateHIDSystemState
@@ -80,7 +81,7 @@ elif platform.system().lower().startswith("linux"):
     import subprocess
 
     def check_dependencies():
-        commands = ["xdotool", "xset"]
+        commands = ["xdotool"]
         missing = []
         for c in commands:
             if shutil.which(c) is None:
@@ -91,14 +92,12 @@ elif platform.system().lower().startswith("linux"):
             raise NotImplementedError(f"Missing dependencies ({l}) - install xdotool using your package manager")
 
     def get_capslock_state():
-        result = subprocess.run(["xset", "-q"], capture_output=True, text=True, check=True)
-        for line in result.stdout.splitlines():
-            if "caps lock" in line.lower():
-                split = line.split(":")
-                for (i, val) in enumerate(split):
-                    if "caps lock" in val.lower():
-                        if len(split) <= i + 1: return False
-                        return "on" in split[i+1].lower()
+        pattern = "/sys/class/leds/input*::capslock/brightness"
+        files = glob.glob(pattern)
+        if len(files) == 0:
+            raise RuntimeError(f"Could not find anything matching {pattern} to check caps lock status!")
+        with open(files[0]) as f:
+            return f.read().strip() == "1"
 
     def set_capslock_state(enabled):
         state = get_capslock_state()
