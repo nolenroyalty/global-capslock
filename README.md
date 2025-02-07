@@ -35,7 +35,7 @@ DOWNLOAD CODE. THEN INSTALL `xdotool` IF ON lINUX. THen
 
 either:
 * use [uv](https://github.com/astral-sh/uv) which might handle everything for you
-* `uv client.py` oR SOMETHING IDK IF YOU USE UV YOU KNOW THIS
+* `uv run client.py` oR SOMETHING IDK IF YOU USE UV YOU KNOW THIS
 
 OR
 
