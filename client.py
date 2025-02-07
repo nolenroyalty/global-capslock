@@ -3,6 +3,7 @@ import websockets
 import json
 from websockets.exceptions import ConnectionClosedError, WebSocketException
 import platform
+import argparse
 import glob
 
 if platform.system() == "Darwin":
@@ -123,14 +124,21 @@ async def get_latest_message(websocket):
 
 
 async def run_client():
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument("-d", "--dissident", action="store_true")
+    args = argparser.parse_args()
+    dissident = args.dissident
+    if dissident:
+        print("Acting against the will of the people.")
+    
     #uri = "ws://localhost:8000/ws"
     uri = "wss://globalcapslock.com/ws"
 
     async with websockets.connect(uri) as websocket:
         print("connected")
-        last_state = False
+        last_state = dissident
         while True:
-            current_state = get_capslock_state()
+            current_state = get_capslock_state() != dissident
 
             if current_state != last_state:
                 message = "1" if current_state else "0"
@@ -141,13 +149,13 @@ async def run_client():
                 try:
                     data = await get_latest_message(websocket)
                     if data == "1" and current_state == False:
-                        set_capslock_state(True)
-                        current_state = True
-                        last_state = True
+                        set_capslock_state(True != dissident)
+                        current_state = True != dissident
+                        last_state = True != dissident
                     elif data == "0" and current_state == True:
-                        set_capslock_state(False)
-                        current_state = False
-                        last_state = False
+                        set_capslock_state(False != dissident)
+                        current_state = False != dissident
+                        last_state = False != dissident
                     elif data == "0" or data == "1":
                         # consistent
                         pass

@@ -44,6 +44,12 @@ OR
 * `pip install -r requirements.txt`
 * `python client.py`
 
+### DISSIDEnt MoDe
+
+fight AGAiNST THE WILL OF the peopLE
+
+* `python client.py --dissident`
+
 ### doeSNT WORK BECAUSE I'M RUNNING WAYLAND
 PLEASE SUBMIT A PULL REQUEST i don't have a gooD MACHINE TO TEST ON
 
