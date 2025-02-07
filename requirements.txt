@@ -1,4 +1,5 @@
 pyobjc-core==11.0; sys_platform == 'darwin'
 pyobjc-framework-Cocoa==11.0; sys_platform == 'darwin'
 pyobjc-framework-Quartz==11.0; sys_platform == 'darwin'
+evdev==1.8.0; sys_platform == 'linux'
 websockets==14.2
