@@ -2,24 +2,18 @@ version = 1
 requires-python = ">=3.12"
 
 [[package]]
-name = "evdev"
-version = "1.8.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4c/eb/b8900082a13a47bb9f69f415174d03cbf12ce95d07345722e1f4ef0e2093/evdev-1.8.0.tar.gz", hash = "sha256:45598eee1ae3876a3122ca1dc0ec8049c01931672d12478b5c610afc24e47d75", size = 32557 }
-
-[[package]]
 name = "global-capslock"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "evdev" },
+    { name = "evdev-binary", marker = "sys_platform == 'darwin'" },
     { name = "pyobjc-framework-quartz", marker = "sys_platform == 'darwin'" },
     { name = "websockets" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "evdev", specifier = ">=1.8.0" },
+    { name = "evdev-binary", marker = "sys_platform == 'darwin'", specifier = ">=1.8.0" },
     { name = "pyobjc-framework-quartz", marker = "sys_platform == 'darwin'", specifier = ">=11.0" },
     { name = "websockets", specifier = ">=14.2" },
 ]
@@ -62,6 +56,17 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/60/5d/df827b78dcb5140652ad08af8038c9ddd7e01e6bdf84462bfee644e6e661/pyobjc_framework_Quartz-11.0-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:cb4a9f2d9d580ea15e25e6b270f47681afb5689cafc9e25712445ce715bcd18e", size = 212061 },
     { url = "https://files.pythonhosted.org/packages/a6/9e/54c48fe8faab06ee5eb80796c8c17ec61fc313d84398540ee70abeaf7070/pyobjc_framework_Quartz-11.0-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:973b4f9b8ab844574461a038bd5269f425a7368d6e677e3cc81fcc9b27b65498", size = 212478 },
     { url = "https://files.pythonhosted.org/packages/4a/28/456b54a59bfe11a91b7b4e94f8ffdcf174ffd1efa169f4283e5b3bc10194/pyobjc_framework_Quartz-11.0-cp313-cp313t-macosx_10_13_universal2.whl", hash = "sha256:66ab58d65348863b8707e63b2ec5cdc54569ee8189d1af90d52f29f5fdf6272c", size = 217973 },
+]
+
+[[package]]
+name = "evdev-binary"
+version = "1.8.0"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8e/31/e3ef69c5d2275f0d5598121b30c0574a84d436ab0b3470d1349744171a0a/evdev_binary-1.8.0-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:4c1b6f79f32c0782a86c09af8afb960e6ca510acfe60d86b37484489fac05cd5", size = 110558 },
+    { url = "https://files.pythonhosted.org/packages/79/b6/e29f20b39891715179fb684ab844d47963c990f6b26faba2898da4b31d7c/evdev_binary-1.8.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:4625a0841b74375d99959f4228fca47d48e951188875737efde218608387d6e6", size = 111523 },
+    { url = "https://files.pythonhosted.org/packages/ba/4b/512a36a5764567fee5a980574551f3f91b42b89ed301bfc531647d3196c5/evdev_binary-1.8.0-cp313-cp313-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:7162534ecfee20298e615e7a1b9b95fbb5309bc83a07dc9308c7d0eb95ba446e", size = 110694 },
+    { url = "https://files.pythonhosted.org/packages/7d/66/974b3ee257618458fa43a0a0be19e0724d01f888267c6ec2f2e691af110b/evdev_binary-1.8.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:c817f2e265f83f96b917b4b11e9b4e49d022ac79971d0bbd056312d00c5e82a5", size = 111666 },
 ]
 
 [[package]]
