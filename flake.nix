@@ -25,14 +25,14 @@
         projectDir = ./.;
         preferWheel = true;
         nativeBuildInputs = (pythonApp.nativeBuildInputs or [ ]) ++ [ pkgs.python3Packages.setuptools ];
-      };
+      }; # This currently will refuse to build complaining about setuptools
     in
     {
-      apps.${system}.default = {
-        type = "app";
-        program = "${pythonApp}/bin/global-capslock";
+      # apps.${system}.default = {
+      #   type = "app";
+      #   program = "${pythonApp}/bin/global-capslock";
 
-      };
+      # };
 
       devShells.${system}.default = pkgs.mkShell {
         name = "global-capslock";
