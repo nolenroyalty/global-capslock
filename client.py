@@ -79,9 +79,14 @@ elif platform.system() == "Windows":
 elif platform.system().lower().startswith("linux"):
     import shutil
     import subprocess
+    
+    session_type = platform.os.getenv("XDG_SESSION_TYPE")
 
     def check_dependencies():
-        commands = ["xdotool"]
+        if session_type == "wayland":
+            commands = ["ydotool"]
+        else:  # Assume x11
+            commands = ["xdotool"]
         missing = []
         for c in commands:
             if shutil.which(c) is None:
@@ -89,7 +94,7 @@ elif platform.system().lower().startswith("linux"):
 
         if missing:
             l = ", ".join(missing)
-            raise NotImplementedError(f"Missing dependencies ({l}) - install xdotool using your package manager")
+            raise NotImplementedError(f"Missing dependencies ({l}) - install them using your package manager")
 
     def get_capslock_state():
         pattern = "/sys/class/leds/input*::capslock/brightness"
@@ -102,7 +107,10 @@ elif platform.system().lower().startswith("linux"):
     def set_capslock_state(enabled):
         state = get_capslock_state()
         if state != enabled:
-            subprocess.run(["xdotool", "key", "Caps_Lock+Caps_Lock"], check=True)
+            if session_type == "wayland":
+                subprocess.run(["ydotool", "key", "58:1", "58:0"], check=True)
+            else:  # Assume x11
+                subprocess.run(["xdotool", "key", "Caps_Lock+Caps_Lock"], check=True)
 else:
     plat = platform.system()
     raise NotImplementedError(f"Unsupported platform: {plat}")
