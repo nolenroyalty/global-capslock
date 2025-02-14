@@ -6,14 +6,14 @@ name = "global-capslock"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "evdev-binary", marker = "sys_platform == 'darwin'" },
+    { name = "evdev-binary", marker = "sys_platform == 'linux'" },
     { name = "pyobjc-framework-quartz", marker = "sys_platform == 'darwin'" },
     { name = "websockets" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "evdev-binary", marker = "sys_platform == 'darwin'", specifier = ">=1.8.0" },
+    { name = "evdev-binary", marker = "sys_platform == 'linux'", specifier = ">=1.8.0" },
     { name = "pyobjc-framework-quartz", marker = "sys_platform == 'darwin'", specifier = ">=11.0" },
     { name = "websockets", specifier = ">=14.2" },
 ]
