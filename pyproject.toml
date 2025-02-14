@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "evdev-binary>=1.8.0; sys_platform == 'linux'",
     "pyobjc-framework-quartz>=11.0 ; sys_platform == 'darwin'",
     "websockets>=14.2",
 ]
