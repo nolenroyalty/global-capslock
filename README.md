@@ -1,9 +1,12 @@
-# THIS IS A GLOBAL CAPSLOCK KEY
+# THIS WAS A GLOBAL CAPSLOCK KEY
 
 <img width="394" alt="Screenshot 2025-02-04 at 6 11 53 PM" src="https://github.com/user-attachments/assets/6179f4dc-0f9a-42ec-b8a7-5505127a0fe8" />
 
-## [CURRENT GLOBAL CAPSLOck status available here](https://globalcapslock.com)
-(thATS HTTPS://GLOBALCAPSLOCK.COM)
+## THIS ExPeriencE Is COMPLETE
+
+<img width="512" alt="Screenshot 2025-02-16 at 12 02 58 PM" src="https://github.com/user-attachments/assets/164e9b3f-2872-48ce-901b-705a4ced59b1" />
+
+ThaNKs For PLAYiNG. RuN IT YoURSELF If YOu'D LIKE
 
 ## WAIT what
 
@@ -16,6 +19,10 @@ NO MORE DISAGREEING ABOUT WHEN TO USE CAPS LOCK
 NOw we can all share a siNGLE KEY!
 
 ## QUESTIONS
+
+### HoW TO RUn ThiS MYSelF
+
+`example-server.py` MAY HELp
 
 ### WHY DO THIS
 I WANTED us to all agree about caps lock usage
