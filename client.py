@@ -79,17 +79,13 @@ elif platform.system() == "Windows":
 elif platform.system().lower().startswith("linux"):
     import shutil
     import subprocess
+    from evdev import UInput, ecodes as e
 
     def check_dependencies():
-        commands = ["xdotool"]
-        missing = []
-        for c in commands:
-            if shutil.which(c) is None:
-                missing.append(c)
+        return True
 
-        if missing:
-            l = ", ".join(missing)
-            raise NotImplementedError(f"Missing dependencies ({l}) - install xdotool using your package manager")
+    ui = UInput()
+
 
     def get_capslock_state():
         pattern = "/sys/class/leds/input*::capslock/brightness"
@@ -102,7 +98,10 @@ elif platform.system().lower().startswith("linux"):
     def set_capslock_state(enabled):
         state = get_capslock_state()
         if state != enabled:
-            subprocess.run(["xdotool", "key", "Caps_Lock+Caps_Lock"], check=True)
+            ui.write(e.EV_KEY, e.KEY_CAPSLOCK, 1)
+            ui.write(e.EV_KEY, e.KEY_CAPSLOCK, 0)
+            ui.syn()
+
 else:
     plat = platform.system()
     raise NotImplementedError(f"Unsupported platform: {plat}")

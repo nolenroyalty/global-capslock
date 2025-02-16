@@ -38,7 +38,7 @@ mAC, wINDOWS, AND lINUX. BUt Linux requires that you insTALL `xdotool` SO MAKE S
 
 ### HOW TO INSTALL??
 
-DOWNLOAD CODE. THEN INSTALL `xdotool` IF ON lINUX. THen
+DOWNLOAD CODE. THen
 
 either:
 * use [uv](https://github.com/astral-sh/uv) which might handle everything for you
